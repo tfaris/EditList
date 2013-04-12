@@ -1,0 +1,62 @@
+<html>
+    <head>
+        <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+        <script type="text/javascript" src="js/jquery.editlist.js"></script>
+        <style>
+            ul,ol{
+                width: 400px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            ul{
+                list-style: none;
+            }
+            h4,h2,.help{
+                text-align:center;
+            }
+            .divide{
+                margin-top:100px;
+            }
+            .help span{
+                width:16px;
+                height:16px;
+                display:inline-block;
+            }
+            .add{
+                background: url("css/glyphicons-halflings.png") no-repeat -408px -96px;
+            }
+            .remove{
+                background: url("css/glyphicons-halflings.png") no-repeat -312px 0;
+            }
+        </style>
+        <link rel="stylesheet" href="css/jquery.editlist.css" />
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $(".editlist").editlist();                
+            });
+        </script>
+    </head>
+    <body>
+        <h2>jQuery Editable Lists</h2>
+    
+        <h4>An initially empty editable list:</h4>
+        <ul class="editlist"></ul>
+        <p class="help">Items can be added by clicking the row containing the <span class="add"></span>.</p>
+        <p class="help">They can be removed by clicking the <span class="remove"></span> on each row.</p>
+        
+        <h4 class="divide">An editable list with some initial items:</h4>
+        <ul class="editlist">
+            <li>Item One</li>
+            <li>Item Two</li>
+        </ul>
+        
+        <h4 class="divide">Editable lists with the name attribute set will generate hidden inputs that will be GET/POSTed with forms.</h4>
+        <ul class="editlist" name="namedlist">
+            <li>This will be named "namedList0"</li>
+            <li>This will be "namedList1"
+        </ul>
+        
+        <h4 class="divide">Ordered lists work as well</h4>
+        <ol class="editlist"></ol>
+    </body>
+</html>

@@ -1,0 +1,37 @@
+.editableList{
+    list-style: none;
+    padding: 5px;
+    border: 1px rgba(177, 177, 177, 0.86) solid;
+    width: 100%;
+}
+.editableList input[type=text]{
+    width: 80%;
+}
+.editableListItem{
+    background-color: #f9fcf7;
+    padding: 5px;
+    margin: 5px;
+    border: 1px rgb(126, 126, 126) dashed;
+    min-height:15px;
+    box-shadow: 1px 1px 5px 1px #ddd;
+    min-height:15px;
+}
+.editableListItem:hover{
+    background-color: #dbf9fc;
+}
+.editableListAdd {
+    box-shadow: none !important;
+}
+.editableListLink{
+    cursor: pointer;
+    width: 14px;
+    height: 14px;
+    display: inline-block;
+    float: right;
+}
+.editableListLink.add{
+    background: url("glyphicons-halflings.png") no-repeat -408px -96px;
+}
+.editableListLink.remove{
+    background: url("glyphicons-halflings.png") no-repeat -312px 0;
+}
