@@ -13,8 +13,12 @@
         editlist: function(){
             return this.each(function(){
                 // Add default empty "add" list item
+                var list = $(this);
+                if (!list.hasClass("editableList")){
+                    list.addClass("editableList");
+                }
                 var addLink = $("<li class='editableListAdd'><span class='editableListLink add'></span></li>");
-                $(this).append(addLink);
+                list.append(addLink);
                 new $.EditableList(this);
             });
         }
@@ -36,11 +40,11 @@
             }
             else if (!item.hasClass("editableList-editing")){
                 item.addClass("editableList-editing")
-                var tmp = item.text(),
-                    inputText = "<input id='editableListEditor' class='editListInput' type='text' value='"+tmp+"'>";
+                var tmp = item.find("input.editableListField").val(),
+                    textInput = $("<input id='editableListEditor' class='editListInput' type='text'>").attr("value", tmp);
 
                 // Surround the original HTML in a hidden div so we can save it, and add an input for editing.
-                var newHTML = inputText + "<div class='editableListOriginal' style='display:none'>" + item[0].innerHTML + "</div>";
+                var newHTML = textInput[0].outerHTML + "<div class='editableListOriginal' style='display:none'>" + item[0].innerHTML + "</div>";
                 item[0].innerHTML = newHTML;
 
                 var input = $("#editableListEditor");
@@ -57,13 +61,18 @@
                             input.remove();
                             // Remove the surrounding div and replace it with the original HTML
                             coverDiv.replaceWith(original);
+                            // Remove everything from the original except for the hidden input and
+                            // list links
+                            original.not(".editableListField,.editableListLink").remove();
+                            item.append(this.value);
+
                             // Replace text nodes if they exist, or append the text (new item)
-                            var textNodes = original.filter(function(){ return this.nodeType == 3; });
-                            if (textNodes.size() > 0){
-                                textNodes.replaceWith(this.value);
-                            } else{
-                                item.append(this.value);
-                            }
+//                            var textNodes = original.filter(function(){ return this.nodeType == 3; });
+//                            if (textNodes.size() > 0){
+//                                textNodes.replaceWith(this.value);
+//                            } else{
+//                                item.append(this.value);
+//                            }
                             // Update the field value
                             var listName = editableList.attr("name");
                             if (listName){
@@ -105,9 +114,7 @@
 
                 event.stopPropagation();
                 input.trigger('focus');
-                if (input.length > 0){
-                    input[0].select();
-                }
+                input[0].select();
             }
         });
 
@@ -137,6 +144,11 @@
         }
         function updateFields(){
             var listName = editableList.attr("name");
+            if (!listName){
+                // Give the list a default name
+                listName = "editableList" + ($(".editableList").size() + 1);
+                editableList.attr("name", listName);
+            }
             editableList.find("li").each(function(index){
                 var item = $(this);
 
@@ -147,14 +159,17 @@
                 if (!isAddItem(item)){
 
                     if (listName){
-                        var value =  item.contents().filter(function(){ return this.nodeType == 3; }).text(),
+                        var value =  item[0].innerHTML,   //.contents().filter(function(){ return this.nodeType == 3; }).text(),
                             field = item.find("input[type=hidden][class='editableListField']");
                         if (field.length > 0){
                             // Change the input name to match the item's index
                             field.attr("name", listName+index);
                         } else{
                             // Create an input and append to the item
-                            var newField = $("<input type='hidden' class='editableListField' name='"+listName+index+"' value='"+value+"'>");
+                            var newField = $("<input type='hidden' class='editableListField'>").attr({
+                                name: listName + "" + index,
+                                value: value
+                            });
                             item.append(newField);
                         }
                     }
